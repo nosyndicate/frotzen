@@ -1,2 +1,7 @@
+
 # Mac OS X
 .DS_Store
+
+*.o
+*.a
+frotz
