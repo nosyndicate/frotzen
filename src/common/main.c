@@ -25,7 +25,8 @@
  */
 
 #include "frotz.h"
-#include "main.h"
+#include "main_lib.h"
+
 
 #ifndef MSDOS_16BIT
 #define cdecl
