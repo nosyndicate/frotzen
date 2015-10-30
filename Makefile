@@ -131,7 +131,6 @@ COMMON_OBJECT = $(COMMON_DIR)/buffer.o \
 		$(COMMON_DIR)/files.o \
 		$(COMMON_DIR)/hotkey.o \
 		$(COMMON_DIR)/input.o \
-		$(COMMON_DIR)/main.o \
 		$(COMMON_DIR)/math.o \
 		$(COMMON_DIR)/object.o \
 		$(COMMON_DIR)/process.o \
@@ -144,6 +143,9 @@ COMMON_OBJECT = $(COMMON_DIR)/buffer.o \
 		$(COMMON_DIR)/table.o \
 		$(COMMON_DIR)/text.o \
 		$(COMMON_DIR)/variable.o
+
+COMMON_MAIN_LIB_OBJECT = $(COMMON_DIR)/main_lib.o
+COMMON_MAIN_OBJECT = $(COMMON_DIR)/main.o 
 
 CURSES_DIR = $(SRCDIR)/curses
 CURSES_TARGET = $(SRCDIR)/frotz_curses.a
@@ -196,6 +198,7 @@ CURSES_DEFS = $(OPT_DEFS) $(COLOR_DEFS) $(SOUND_DEFS) $(SOUNDCARD) \
 	$(MEMMOVE_DEF) $(STRRCHR_DEF)
 
 
+# need lib are target lib curses and sound_lib
 $(NAME): $(NAME)-curses
 curses:  $(NAME)-curses
 $(NAME)-curses: $(COMMON_TARGET) $(CURSES_TARGET) $(BLORB_TARGET)
@@ -213,11 +216,31 @@ $(NAME)-sdl:	$(COMMON_TARGET) $(SDL_TARGET) $(BLORB_TARGET)
 
 all:	$(NAME) d$(NAME)
 
+LIB_TARGET =  libfrotz.a
+
+lib:	$(LIB_TARGET)
+$(LIB_TARGET): $(COMMON_OBJECT) $(COMMON_MAIN_LIB_OBJECT) $(CURSES_OBJECT) $(BLORB_OBJECT)
+	@echo
+	@echo "Archiving lib code..."
+	ar rcs $(LIB_TARGET) $(COMMON_LIB_OBJECT) $(COMMON_MAIN_LIB_OBJECT) $(CURSES_OBJECT) $(BLORB_OBJECT) 
+	ranlib $(LIB_TARGET)
+	@echo
+
+test:	
+	g++ src/test.cpp -L/Users/nosyndicate/code/frotzen -lfrotz -lcurses
 
 .SUFFIXES:
 .SUFFIXES: .c .o .h
 
+# $@ for object file and $< for source file
+
 $(COMMON_OBJECT): %.o: %.c
+	$(CC) $(OPTS) $(COMMON_DEFS) -o $@ -c $<
+
+$(COMMON_MAIN_LIB_OBJECT): %.o: %.c
+	$(CC) $(OPTS) $(COMMON_DEFS) -o $@ -c $<
+
+$(COMMON_MAIN_OBJECT): %.o: %.c
 	$(CC) $(OPTS) $(COMMON_DEFS) -o $@ -c $<
 
 $(BLORB_OBJECT): %.o: %.c
@@ -237,10 +260,10 @@ $(SDL_OBJECT): %.o: %.c
 # config target to make first.
 #
 common_lib:	$(COMMON_TARGET)
-$(COMMON_TARGET): $(COMMON_OBJECT)
+$(COMMON_TARGET): $(COMMON_OBJECT) $(COMMON_MAIN_OBJECT)
 	@echo
 	@echo "Archiving common code..."
-	ar rc $(COMMON_TARGET) $(COMMON_OBJECT)
+	ar rc $(COMMON_TARGET) $(COMMON_OBJECT) $(COMMON_MAIN_OBJECT)
 	ranlib $(COMMON_TARGET)
 	@echo
 

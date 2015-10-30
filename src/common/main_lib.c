@@ -144,34 +144,34 @@ void z_piracy (void)
  * Prepare and run the game.
  *
  */
-int cdecl main (int argc, char *argv[])
+int main_program(int argc, char *argv[])
 {
     os_init_setup ();
-
+    
     os_process_arguments (argc, argv);
-
+    
     init_buffer ();     // in buffer.c   set variable "buffer" to all 0
-
+    
     init_err ();    //err.c
-
+    
     init_memory ();     //fastmem.c    load the story file
-
+    
     init_process ();    //process.c   set variable "finished" to 0
-
+    
     init_sound ();
-
+    
     os_init_screen ();
-
+    
     init_undo ();
-
+    
     z_restart ();   //fastmem.c
-
+    
     interpret ();   //process.c
-
+    
     reset_memory ();
-
+    
     os_reset_screen ();
-
+    
     return 0;
-
-}/* main */
+    
+}
