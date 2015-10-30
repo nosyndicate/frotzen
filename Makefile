@@ -227,7 +227,7 @@ $(LIB_TARGET): $(COMMON_OBJECT) $(COMMON_MAIN_LIB_OBJECT) $(CURSES_OBJECT) $(BLO
 	@echo
 
 test:	
-	g++ src/test.cpp -L/Users/nosyndicate/code/frotzen -lfrotz -lcurses
+	g++ -o frotzen src/test.cpp -L. -lfrotz -lcurses
 
 .SUFFIXES:
 .SUFFIXES: .c .o .h
