@@ -1,2 +1,8 @@
 # Mac OS X
 .DS_Store
+
+*.a
+*.o
+*.dSYM debug file
+frotz
+frotzen

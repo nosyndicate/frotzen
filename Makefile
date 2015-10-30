@@ -118,6 +118,8 @@ VERSION = 2.44
 NAME = frotz
 BINNAME = $(NAME)
 
+SIM_NAME = frotzen
+
 DISTFILES = bugtest
 
 DISTNAME = $(BINNAME)-$(VERSION)
@@ -131,7 +133,6 @@ COMMON_OBJECT = $(COMMON_DIR)/buffer.o \
 		$(COMMON_DIR)/files.o \
 		$(COMMON_DIR)/hotkey.o \
 		$(COMMON_DIR)/input.o \
-		$(COMMON_DIR)/main.o \
 		$(COMMON_DIR)/math.o \
 		$(COMMON_DIR)/object.o \
 		$(COMMON_DIR)/process.o \
@@ -144,6 +145,9 @@ COMMON_OBJECT = $(COMMON_DIR)/buffer.o \
 		$(COMMON_DIR)/table.o \
 		$(COMMON_DIR)/text.o \
 		$(COMMON_DIR)/variable.o
+
+COMMON_MAIN_OBJECT = $(COMMON_DIR)/main.o
+COMMON_LIB_OBJECT = $(COMMON_DIR)/main_lib.o
 
 CURSES_DIR = $(SRCDIR)/curses
 CURSES_TARGET = $(SRCDIR)/frotz_curses.a
@@ -213,11 +217,29 @@ $(NAME)-sdl:	$(COMMON_TARGET) $(SDL_TARGET) $(BLORB_TARGET)
 
 all:	$(NAME) d$(NAME)
 
+LIB_TARGET = libfrotz.a
+
+lib:	$(LIB_TARGET)
+$(LIB_TARGET): $(COMMON_OBJECT) $(COMMON_LIB_OBJECT) $(CURSES_OBJECT) $(BLORB_OBJECT)
+	@echo
+	@echo "Archiving common code..."
+	ar rc $(LIB_TARGET) $(COMMON_OBJECT) $(COMMON_LIB_OBJECT) $(CURSES_OBJECT) $(BLORB_OBJECT)
+	ranlib $(LIB_TARGET)
+	@echo
+
+sim:
+	g++ $(OPTS) -o $(SIM_NAME) src/sim.cpp -L. -lfrotz -lcurses
 
 .SUFFIXES:
 .SUFFIXES: .c .o .h
 
 $(COMMON_OBJECT): %.o: %.c
+	$(CC) $(OPTS) $(COMMON_DEFS) -o $@ -c $<
+
+$(COMMON_MAIN_OBJECT): %.o: %.c
+	$(CC) $(OPTS) $(COMMON_DEFS) -o $@ -c $<
+
+$(COMMON_LIB_OBJECT): %.o: %.c
 	$(CC) $(OPTS) $(COMMON_DEFS) -o $@ -c $<
 
 $(BLORB_OBJECT): %.o: %.c
@@ -237,10 +259,10 @@ $(SDL_OBJECT): %.o: %.c
 # config target to make first.
 #
 common_lib:	$(COMMON_TARGET)
-$(COMMON_TARGET): $(COMMON_OBJECT)
+$(COMMON_TARGET): $(COMMON_OBJECT) $(COMMON_MAIN_OBJECT)
 	@echo
 	@echo "Archiving common code..."
-	ar rc $(COMMON_TARGET) $(COMMON_OBJECT)
+	ar rc $(COMMON_TARGET) $(COMMON_OBJECT) $(COMMON_MAIN_OBJECT)
 	ranlib $(COMMON_TARGET)
 	@echo
 
@@ -326,12 +348,12 @@ dist: distclean
 	@echo
 
 clean:
-	rm -f $(SRCDIR)/*.h $(SRCDIR)/*.a
+	rm -rf $(SRCDIR)/*.h $(SRCDIR)/*.a lib*.a $(SIM_NAME) $(BINNAME)$(EXTENSION) *.dSYM
 	find . -iname *.o -exec rm -f {} \;
 	find . -iname *.obj -exec rm -f {} \;
 
 distclean: clean
-	rm -f $(BINNAME)$(EXTENSION) d$(BINNAME)$(EXTENSION) s$(BINNAME)
+	rm -f $(BINNAME)$(EXTENSION) d$(BINNAME)$(EXTENSION) s$(BINNAME) 
 	find . -iname *.exe -exec rm -f {} \;
 	find . -iname *.bak -exec rm -f {} \;
 	find . -iname *.lib -exec rm -f {} \;
