@@ -1,11 +1,12 @@
 
 # Mac OS X
-.DS_Store
+*.DS_Store
 
 
 *.a
 *.o
-*.dSYM debug file
+#debug file
+*.dSYM 
 frotz
 frotzen
 

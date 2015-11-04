@@ -163,3 +163,14 @@ void reset_frotz()
     reset_memory ();
     os_reset_screen ();
 }
+
+int get_scores()
+{
+    return scores + 0;
+}
+
+int get_moves()
+{
+    return moves + 0;
+}
+

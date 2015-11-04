@@ -113,7 +113,7 @@ void print_char (zchar c)
 
 	buffer[bufpos++] = c;
 
-    printf("%s\n",buffer);
+    //printf("%s\n",buffer); // by Ermo
 
 	if (bufpos == TEXT_BUFFER_SIZE)
 	    runtime_error (ERR_TEXT_BUF_OVF);

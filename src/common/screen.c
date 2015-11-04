@@ -19,6 +19,7 @@
  */
 
 #include "frotz.h"
+#include "main_lib.h"
 
 extern void set_header_extension (int, zword);
 
@@ -1554,7 +1555,7 @@ void z_show_status (void)  //Ermo: other information
        accident, so just return if the version number does not fit */
 
     if (h_version >= V4)
-	return;
+	   return;
 
     /* Read all relevant global variables from the memory of the
        Z-machine into local variables */
@@ -1617,11 +1618,16 @@ void z_show_status (void)  //Ermo: other information
 
 	print_string (brief ? "S: " : "Score: ");
 	print_num (global1);
+    // signed to the gloabl variable scores
+    scores = global1;
+
 
 	pad_status_line (brief ? 8 : 14);
 
 	print_string (brief ? "M: " : "Moves: ");
 	print_num (global2);
+    // signed to the gloabl variable moves
+    moves = global2;
 
     }
 

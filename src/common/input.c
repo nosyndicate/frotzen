@@ -175,7 +175,7 @@ void z_read (void)
     int i;
 
 
-    printf("in z_read, the version number is %d", h_version);
+    //printf("in z_read, the version number is %d", h_version);   // by Ermo
 
     /* Supply default arguments */
     if (zargc < 3)
@@ -212,7 +212,7 @@ void z_read (void)
 
     buffer[i] = 0;
 
-    printf("before stream_read_input\n");
+    //printf("before stream_read_input\n");   by Ermo
 
     /* Draw status line for V1 to V3 games */
 

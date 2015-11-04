@@ -311,7 +311,7 @@ continue_input:
 
     } while (key == ZC_BAD);
 
-    printf("direct replay: %s",buf);
+    //printf("direct replay: %s",buf);
 
     /* Verify mouse clicks */
 

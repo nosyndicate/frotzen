@@ -5,9 +5,14 @@
 extern "C" {
 #endif
 
-void init_frotz(int argc, char *argv[]);
-void start_game();
-void reset_frotz();
+    
+    unsigned short moves;
+    unsigned short scores;
+    void init_frotz(int argc, char *argv[]);
+    void start_game();
+    void reset_frotz();
+    int get_scores();
+    int get_moves();
 
 #ifdef __cplusplus
 }
