@@ -37,7 +37,6 @@
 #define SAVEDIR_DEF		"if-saves"
 #define ZCODEPATH_DEF		"/usr/games/zcode:/usr/local/games/zcode"
 
-
 #define LINELEN		256	/* for getconfig()	*/
 #define COMMENT		'#'	/* for config files	*/
 #define PATHSEP		':'	/* for pathopen()	*/
@@ -53,7 +52,6 @@
 #define PIC_DATA	8
 #define PIC_COLOUR	11
 
-
 /* Paths where z-files may be found */
 #define	PATH1		"ZCODE_PATH"
 #define PATH2		"INFOCOM_PATH"
@@ -68,32 +66,30 @@
 #define getmaxyx(w, y, x)	(y) = getmaxy(w), (x) = getmaxx(w)
 #endif
 
-extern bool color_enabled;		/* ux_text */
+extern bool color_enabled; /* ux_text */
 
-extern char stripped_story_name[FILENAME_MAX+1];
-extern char semi_stripped_story_name[FILENAME_MAX+1];
+extern char stripped_story_name[FILENAME_MAX + 1];
+extern char semi_stripped_story_name[FILENAME_MAX + 1];
 extern char *progname;
-extern char *gamepath;	/* use to find sound files */
+extern char *gamepath; /* use to find sound files */
 
 extern f_setup_t f_setup;
 extern u_setup_t u_setup;
 
-
 /*** Blorb related stuff ***/
-bb_err_t	blorb_err;
-bb_map_t	*blorb_map;
-bb_result_t	blorb_res;
-
+bb_err_t blorb_err;
+bb_map_t *blorb_map;
+bb_result_t blorb_res;
 
 /*** Functions specific to the Unix port of Frotz ***/
 
-bool unix_init_pictures(void);		/* ux_pic.c */
-bool unix_init_pictures(void);		/* ux_pic.c */
-void unix_init_scrollback(void);	/* ux_screen.c */
-void unix_save_screen(int);		/* ux_screen.c */
-void unix_do_scrollback(void);		/* ux_screen.c */
+bool unix_init_pictures(void); /* ux_pic.c */
+bool unix_init_pictures(void); /* ux_pic.c */
+void unix_init_scrollback(void); /* ux_screen.c */
+void unix_save_screen(int); /* ux_screen.c */
+void unix_do_scrollback(void); /* ux_screen.c */
 
-FILE	*pathopen(const char *, const char *, const char *, char *);
+FILE *pathopen(const char *, const char *, const char *, char *);
 
 #ifdef NO_STRRCHR
 char *strrchr(const char *, int);

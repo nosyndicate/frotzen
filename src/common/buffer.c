@@ -21,9 +21,9 @@
 #include <string.h>
 #include "frotz.h"
 
-extern void stream_char (zchar);
-extern void stream_word (const zchar *);
-extern void stream_new_line (void);
+extern void stream_char(zchar);
+extern void stream_word(const zchar *);
+extern void stream_new_line(void);
 
 static zchar buffer[TEXT_BUFFER_SIZE];
 static int bufpos = 0;
@@ -36,39 +36,36 @@ static zchar prev_c = 0;
  * Copy the contents of the text buffer to the output streams.
  *
  */
-void flush_buffer (void)
-{
-    static bool locked = FALSE;
+void flush_buffer(void) {
+	static bool locked = FALSE;
 
-    /* Make sure we stop when flush_buffer is called from flush_buffer.
-       Note that this is difficult to avoid as we might print a newline
-       during flush_buffer, which might cause a newline interrupt, that
-       might execute any arbitrary opcode, which might flush the buffer. */
+	/* Make sure we stop when flush_buffer is called from flush_buffer.
+	 Note that this is difficult to avoid as we might print a newline
+	 during flush_buffer, which might cause a newline interrupt, that
+	 might execute any arbitrary opcode, which might flush the buffer. */
 
-    if (locked || bufpos == 0)
-	return;
+	if (locked || bufpos == 0)
+		return;
 
-    /* Send the buffer to the output streams */
+	/* Send the buffer to the output streams */
 
-    buffer[bufpos] = 0;
+	buffer[bufpos] = 0;
 
+	locked = TRUE;
 
-    locked = TRUE;
-
-    // ERMO: this put word on screen
-    stream_word (buffer);
-
+	// ERMO: this put word on screen
+	stream_word(buffer);
 
 #ifdef SPEECH_OUTPUT
-    os_speech_output(buffer);
+	os_speech_output(buffer);
 #endif
 
-    locked = FALSE;
+	locked = FALSE;
 
-    /* Reset the buffer */
+	/* Reset the buffer */
 
-    bufpos = 0;
-    prev_c = 0;
+	bufpos = 0;
+	prev_c = 0;
 
 }/* flush_buffer */
 
@@ -78,50 +75,53 @@ void flush_buffer (void)
  * High level output function.
  *
  */
-void print_char (zchar c)
-{
-    static bool flag = FALSE;
+void print_char(zchar c) {
+	static bool flag = FALSE;
 
-    if (message || ostream_memory || enable_buffering) {
+	if (message || ostream_memory || enable_buffering) {
 
-	if (!flag) {
+		if (!flag) {
 
-	    /* Characters 0 and ZC_RETURN are special cases */
+			/* Characters 0 and ZC_RETURN are special cases */
 
-	    if (c == ZC_RETURN)
-		{ new_line (); return; }
-	    if (c == 0)
-		return;
+			if (c == ZC_RETURN) {
+				new_line();
+				return;
+			}
+			if (c == 0)
+				return;
 
-	    /* Flush the buffer before a whitespace or after a hyphen */
+			/* Flush the buffer before a whitespace or after a hyphen */
 
-	    if (c == ' ' || c == ZC_INDENT || c == ZC_GAP || (prev_c == '-' && c != '-'))
-		flush_buffer ();
+			if (c == ' ' || c == ZC_INDENT || c == ZC_GAP
+					|| (prev_c == '-' && c != '-'))
+				flush_buffer();
 
-	    /* Set the flag if this is part one of a style or font change */
+			/* Set the flag if this is part one of a style or font change */
 
-	    if (c == ZC_NEW_FONT || c == ZC_NEW_STYLE)
-		flag = TRUE;
+			if (c == ZC_NEW_FONT || c == ZC_NEW_STYLE)
+				flag = TRUE;
 
-	    /* Remember the current character code */
+			/* Remember the current character code */
 
-	    prev_c = c;
+			prev_c = c;
 
-	} else flag = FALSE;
+		} else
+			flag = FALSE;
 
-	/* Insert the character into the buffer */
+		/* Insert the character into the buffer */
 
-	buffer[bufpos++] = c;
+		buffer[bufpos++] = c;
 
-    //printf("%s\n",buffer); // by Ermo
+		//printf("%s\n",buffer); // by Ermo
 
-	if (bufpos == TEXT_BUFFER_SIZE)
-	    runtime_error (ERR_TEXT_BUF_OVF);
+		if (bufpos == TEXT_BUFFER_SIZE)
+			runtime_error(ERR_TEXT_BUF_OVF);
 
-    } else stream_char (c);
+	} else
+		stream_char(c);
 
 }/* print_char */
-
 
 /*
  * new_line
@@ -129,12 +129,11 @@ void print_char (zchar c)
  * High level newline function.
  *
  */
-void new_line (void)
-{
-    flush_buffer (); stream_new_line ();
+void new_line(void) {
+	flush_buffer();
+	stream_new_line();
 
 }/* new_line */
-
 
 /*
  * init_buffer
@@ -142,9 +141,8 @@ void new_line (void)
  * Initialize buffer variables.
  *
  */
-void init_buffer(void)
-{
-    memset(buffer, 0, sizeof (zchar) * TEXT_BUFFER_SIZE);
-    bufpos = 0;
-    prev_c = 0;
+void init_buffer(void) {
+	memset(buffer, 0, sizeof(zchar) * TEXT_BUFFER_SIZE);
+	bufpos = 0;
+	prev_c = 0;
 }

@@ -28,6 +28,7 @@
 #include "main_lib.h"
 
 
+
 #ifndef MSDOS_16BIT
 #define cdecl
 #endif
@@ -164,13 +165,110 @@ void reset_frotz()
     os_reset_screen ();
 }
 
-int get_scores()
-{
-    return scores + 0;
-}
 
-int get_moves()
+void input (void)
 {
-    return moves + 0;
-}
+//    zchar buffer[INPUT_BUFFER_SIZE];
+//    zword addr;
+//    zchar key;
+//    zbyte max, size;
+//    zbyte c;
+//    int i;
+//
+//
+//    //printf("in z_read, the version number is %d", h_version);   // by Ermo
+//
+//    /* Supply default arguments */
+//    if (zargc < 3)
+//	   zargs[2] = 0;
+//
+//    /* Get maximum input size */
+//    addr = zargs[0];
+//    LOW_BYTE (addr, max);
+//
+//    if (h_version <= V4) {
+//        max--;
+//    }
+//
+//
+//    if (max >= INPUT_BUFFER_SIZE) {
+//        max = INPUT_BUFFER_SIZE - 1;
+//    }
+//
+//
+//    /* Get initial input size */
+//    if (h_version >= V5) {
+//        addr++;
+//        LOW_BYTE (addr, size);
+//    } else
+//        size = 0;
+//
+//    /* Copy initial input to local buffer */
+//
+//    for (i = 0; i < size; i++) {
+//        addr++;
+//        LOW_BYTE (addr, c);
+//        buffer[i] = translate_from_zscii (c);
+//    }
+//
+//    buffer[i] = 0;
+//
+//    //printf("before stream_read_input\n");   by Ermo
+//
+//    /* Draw status line for V1 to V3 games */
+//
+//    if (h_version <= V3)
+//        z_show_status ();
+//
+//    /* Read input from current input stream */
+//    key = stream_read_input (
+//        max, buffer,		/* buffer and size */
+//        zargs[2],		/* timeout value   */
+//        zargs[3],		/* timeout routine */
+//        TRUE,	        	/* enable hot keys */
+//        h_version == V6);	/* no script in V6 */
+//
+//    printf("buffer : %s\n",buffer);
+//
+//    if (key == ZC_BAD)
+//        return;
+//
+//    /* Perform save_undo for V1 to V4 games */
+//
+//    if (h_version <= V4)
+//        save_undo ();
+//
+//    /* Copy local buffer back to dynamic memory */
+//
+//    for (i = 0; buffer[i] != 0; i++) {
+//        if (key == ZC_RETURN) {
+//        	// all convert to lower case
+//            if (buffer[i] >= 'A' && buffer[i] <= 'Z')
+//                buffer[i] += 'a' - 'A';
+//            if (buffer[i] >= 0xc0 && buffer[i] <= 0xde && buffer[i] != 0xd7)
+//                buffer[i] += 0x20;
+//        }
+//        if (truncate_question_mark() && buffer[i] == '?') buffer[i] = ' ';
+//        // put the input to dynamic library
+//        storeb ((zword) (zargs[0] + ((h_version <= V4) ? 1 : 2) + i), translate_to_zscii (buffer[i]));
+//    }
+//
+//    /* Add null character (V1-V4) or write input length into 2nd byte */
+//
+//    if (h_version <= V4)
+//        storeb ((zword) (zargs[0] + 1 + i), 0);
+//    else
+//        storeb ((zword) (zargs[0] + 1), i);
+//
+//    /* Tokenise line if a token buffer is present */
+//
+//    if (key == ZC_RETURN && zargs[1] != 0)
+//        tokenise_line (zargs[0], zargs[1], 0, FALSE);
+//
+//    /* Store key */
+//
+//    if (h_version >= V5)
+//        store (translate_to_zscii (key));
+
+}/* z_read */
 

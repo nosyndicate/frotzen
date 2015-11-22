@@ -227,6 +227,8 @@ void z_read (void)
         TRUE,	        	/* enable hot keys */
         h_version == V6);	/* no script in V6 */
 
+    printf("buffer : %s\n",buffer);
+
     if (key == ZC_BAD)
         return;
 
@@ -239,12 +241,14 @@ void z_read (void)
 
     for (i = 0; buffer[i] != 0; i++) {
         if (key == ZC_RETURN) {
+        	// all convert to lower case
             if (buffer[i] >= 'A' && buffer[i] <= 'Z')
                 buffer[i] += 'a' - 'A';
             if (buffer[i] >= 0xc0 && buffer[i] <= 0xde && buffer[i] != 0xd7)
                 buffer[i] += 0x20;
         }
         if (truncate_question_mark() && buffer[i] == '?') buffer[i] = ' ';
+        // put the input to dynamic library
         storeb ((zword) (zargs[0] + ((h_version <= V4) ? 1 : 2) + i), translate_to_zscii (buffer[i]));
     }
 

@@ -1619,7 +1619,7 @@ void z_show_status (void)  //Ermo: other information
 	print_string (brief ? "S: " : "Score: ");
 	print_num (global1);
     // signed to the gloabl variable scores
-    scores = global1;
+
 
 
 	pad_status_line (brief ? 8 : 14);
@@ -1627,7 +1627,7 @@ void z_show_status (void)  //Ermo: other information
 	print_string (brief ? "M: " : "Moves: ");
 	print_num (global2);
     // signed to the gloabl variable moves
-    moves = global2;
+
 
     }
 

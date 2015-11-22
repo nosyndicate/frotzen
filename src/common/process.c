@@ -19,10 +19,14 @@
  */
 
 #include "frotz.h"
+#include "main_lib.h"
 
 #ifdef DJGPP
 #include "djfrotz.h"
 #endif
+
+
+//#define INPUT // comment if want use frotz
 
 
 zword zargs[8];
@@ -295,7 +299,12 @@ void interpret (void)
 				load_all_operands (specifier1);
 	    	}
 
+#ifdef INPUT
+	    	input();
+#else
 		    var_opcodes[opcode - 0xc0] ();
+#endif
+
 
 		}
 
