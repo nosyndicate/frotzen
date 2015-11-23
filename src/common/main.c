@@ -123,6 +123,8 @@ char *option_zcode_path;
 
 long reserve_mem = 0;
 
+lua_State *L;
+int islua_play = 1;
 
 /*
  * z_piracy, branch if the story file is a legal copy.
@@ -136,6 +138,12 @@ void z_piracy (void)
 
 }/* z_piracy */
 
+void bail(lua_State *L, char *msg){
+        fprintf(stderr, "\nFATAL ERROR:\n  %s: %s\n\n",
+                msg, lua_tostring(L, -1));
+        exit(1);
+}
+
 
 /*
  * main
@@ -145,6 +153,25 @@ void z_piracy (void)
  */
 int cdecl main (int argc, char *argv[])
 {
+    
+
+    L = luaL_newstate();                        /* Create Lua state variable */
+    luaL_openlibs(L);                           /* Load Lua libraries */
+
+    if (luaL_loadfile(L, "helloscript.lua"))    /* Load but don't run the Lua script */
+        bail(L, "luaL_loadfile() failed");      /* Error out if file can't be read */
+
+    
+    //  prime the lua script MUST DO THIS!!!
+    if (lua_pcall(L, 0, 0, 0))                  /* Run the loaded Lua script */
+        bail(L, "lua_pcall() failed");          /* Error out if Lua file has an error */
+
+    lua_getglobal(L, "tellme");
+    // now actually call the function
+    if (lua_pcall(L, 0, 0, 0))                  /* Run the function */
+        bail(L, "lua_pcall() failed");          /* Error out if Lua file has an error */
+
+    
     os_init_setup ();
 
     os_process_arguments (argc, argv);
@@ -165,8 +192,13 @@ int cdecl main (int argc, char *argv[])
 
     z_restart ();   //fastmem.c
 
+    
+
+    
     interpret ();   //process.c
 
+    lua_close(L);                               /* Clean up, free the Lua state var */
+    
     reset_memory ();
 
     os_reset_screen ();

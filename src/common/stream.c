@@ -306,13 +306,46 @@ continue_input:
 
 	if (istream_replay)
 	    key = replay_read_input (buf);
+        else if (islua_play == 1)
+        {
+            // DREW: get the buffer that has the string for the 
+            lua_getglobal(L, "getAction");                 /* Tell it to run callfuncscript.lua->square() */
+            if (lua_pcall(L, 0, 2, 0))                  /* Run function, !!! NRETURN=1 !!! */
+            {
+                bail(L, "lua_pcall() failed");
+            }
+            
+            if (!lua_isnumber(L, -1)) {
+                bail(L, "lua_isnumber failed");
+            }
+            int actLen = lua_tonumber(L, -1);
+            lua_pop(L, 1);
+            if (!lua_isstring(L, -1)) {
+                bail(L, "lua_isstring failed");
+            }
+            
+            const char* act = lua_tostring (L, -1);
+            lua_pop(L, 1);
+            memmove(buf, act, actLen);
+            
+            lua_getglobal(L, "writeIt");
+            lua_pushstring(L, act);
+            if (lua_pcall(L, 1, 0, 0))                 
+            {
+                bail(L, "lua_pcall() failed");
+            }
+           
+            key = ZC_RETURN;
+            
+        }
 	else
 	    key = console_read_input (max, buf, timeout, key != ZC_BAD);  // Ermo: buf holds the input 
 
     } while (key == ZC_BAD);
 
     printf("direct replay: %s",buf);
-
+    
+   
     /* Verify mouse clicks */
 
     if (key == ZC_SINGLE_CLICK || key == ZC_DOUBLE_CLICK)

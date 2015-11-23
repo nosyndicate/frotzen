@@ -30,6 +30,20 @@ typedef int bool;
 
 #include <stdio.h>
 
+// DREW
+#include <stdlib.h>                             /* For function exit() */
+#include <string.h>
+
+#include <lua.h>                                /* Always include this when calling Lua */
+#include <lauxlib.h>                            /* Always include this when calling Lua */
+#include <lualib.h>                             /* Always include this when calling Lua */
+
+extern lua_State *L;
+extern int islua_play;
+
+void bail(lua_State *L, char *msg);
+
+// END DREW
 
 /* typedef unsigned short zbyte; */
 typedef unsigned char zbyte;

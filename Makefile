@@ -1,8 +1,8 @@
 # Define your C compiler.  I recommend gcc if you have it.
 # MacOS users should use "cc" even though it's really "gcc".
 #
-CC = gcc
-#CC = cc
+#CC = gcc
+CC = cc
 
 # Define your optimization flags.  Most compilers understand -O and -O2,
 # Standard (note: Solaris on UltraSparc using gcc 2.8.x might not like this.)
@@ -59,6 +59,7 @@ SOUND_DEV = /dev/dsp
 #INCL = -I/usr/freeware/include
 #INCL = -I/5usr/include
 #INCL = -I/path/to/ncurses.h
+INCL = -I/usr/local/include/
 
 # If your vendor-supplied curses library won't work, uncomment the
 # location where the ncurses library is.
@@ -68,12 +69,15 @@ SOUND_DEV = /dev/dsp
 #LIB = -L/usr/freeware/lib
 #LIB = -L/5usr/lib
 #LIB = -L/path/to/libncurses.so
+LIB = -L/usr/local/Cellar/lua/5.1.5/lib/
+
 
 # One of these must always be uncommented.  If your vendor-supplied
 # curses library won't work, comment out the first option and uncomment
 # the second.
 #
 CURSES = -lcurses
+LUA = -llua
 #CURSES = -lncurses
 
 # Uncomment this if your need to use ncurses instead of the
@@ -199,17 +203,17 @@ CURSES_DEFS = $(OPT_DEFS) $(COLOR_DEFS) $(SOUND_DEFS) $(SOUNDCARD) \
 $(NAME): $(NAME)-curses
 curses:  $(NAME)-curses
 $(NAME)-curses: $(COMMON_TARGET) $(CURSES_TARGET) $(BLORB_TARGET)
-	$(CC) -o $(BINNAME)$(EXTENSION) $(TARGETS) $(LIB) $(CURSES) $(SOUND_LIB)
+	$(CC) -o $(BINNAME)$(EXTENSION) $(TARGETS) $(LIB) $(INCL) $(LUA) $(CURSES) $(SOUND_LIB)
 
 dumb:		$(NAME)-dumb
 d$(NAME):	$(NAME)-dumb
 $(NAME)-dumb:		$(COMMON_TARGET) $(DUMB_TARGET)
-	$(CC) -o d$(BINNAME)$(EXTENSION) $(COMMON_TARGET) $(DUMB_TARGET) $(LIB)
+	$(CC) -o d$(BINNAME)$(EXTENSION) $(COMMON_TARGET) $(DUMB_TARGET) $(LIB) $(INCL) $(LUA)
 
 sdl:		$(NAME)-sdl
 s$(NAME):	$(NAME)-sdl
 $(NAME)-sdl:	$(COMMON_TARGET) $(SDL_TARGET) $(BLORB_TARGET)
-	$(CC) -o s$(BINNAME) $(COMMON_TARGET) $(SDL_TARGET) $(BLORB_TARGET) $(SDL_LIBS)
+	$(CC) -o s$(BINNAME) $(COMMON_TARGET) $(SDL_TARGET) $(BLORB_TARGET) $(SDL_LIBS) $(INCL) $(LUA)
 
 all:	$(NAME) d$(NAME)
 
@@ -218,19 +222,19 @@ all:	$(NAME) d$(NAME)
 .SUFFIXES: .c .o .h
 
 $(COMMON_OBJECT): %.o: %.c
-	$(CC) $(OPTS) $(COMMON_DEFS) -o $@ -c $<
+	$(CC) $(OPTS) $(COMMON_DEFS) $(INCL) $(LIB) $(LUA) -o $@ -c $<
 
 $(BLORB_OBJECT): %.o: %.c
-	$(CC) $(OPTS) -o $@ -c $<
+	$(CC) $(OPTS) $(INCL) $(LIB) $(LUA) -o $@ -c $<
 
 $(DUMB_OBJECT): %.o: %.c
-	$(CC) $(OPTS) -o $@ -c $<
+	$(CC) $(OPTS) $(INCL) $(LIB) $(LUA) -o $@ -c $<
 
 $(CURSES_OBJECT): %.o: %.c
-	$(CC) $(OPTS) $(CURSES_DEFS) $(INCL) -o $@ -c $<
+	$(CC) $(OPTS) $(LIB) $(LUA) $(CURSES_DEFS) $(INCL) -o $@ -c $<
 
 $(SDL_OBJECT): %.o: %.c
-	$(CC) $(OPTS) $(SDL_DEFS) $(INCL) -o $@ -c $<
+	$(CC) $(OPTS) $(SDL_DEFS) $(INCL) $(LIB) $(LUA) -o $@ -c $<
 
 
 # If you're going to make this target manually, you'd better know which

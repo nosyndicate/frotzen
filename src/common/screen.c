@@ -1622,7 +1622,19 @@ void z_show_status (void)  //Ermo: other information
 
 	print_string (brief ? "M: " : "Moves: ");
 	print_num (global2);
-
+        
+        
+        //DREW send the current score and move to the lua file
+        lua_getglobal(L, "setCurrentScore");                 /* Tell it to run callfuncscript.lua->square() */
+        lua_pushnumber(L, global1);                       /* Submit 6 as the argument to square() */
+        if (lua_pcall(L, 1, 0, 0))                  /* Run function, !!! NRETURN=1 !!! */
+            bail(L, "lua_pcall() failed");
+        
+        lua_getglobal(L, "setCurrentMove");                 /* Tell it to run callfuncscript.lua->square() */
+        lua_pushnumber(L, global2);                       /* Submit 6 as the argument to square() */
+        if (lua_pcall(L, 1, 0, 0))                  /* Run function, !!! NRETURN=1 !!! */
+            bail(L, "lua_pcall() failed");
+        
     }
 
     /* Pad the end of the status line with spaces */

@@ -55,6 +55,13 @@ void flush_buffer (void)
 
     locked = TRUE;
 
+    // DREW: pass the current word to the lua
+    lua_getglobal(L, "appendState");                 /* Tell it to run callfuncscript.lua->square() */
+    lua_pushstring(L, buffer);                       /* Submit 6 as the argument to square() */
+    if (lua_pcall(L, 1, 0, 0))                  /* Run function, !!! NRETURN=1 !!! */
+        bail(L, "lua_pcall() failed");
+
+    
     // ERMO: this put word on screen
     stream_word (buffer);
 
