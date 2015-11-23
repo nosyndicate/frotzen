@@ -1,2 +1,22 @@
 # Mac OS X
 .DS_Store
+
+
+# communication file
+score.txt
+scratch.txt
+stateString.txt
+move.txt
+
+
+# eclipse files
+.cproject
+.project
+
+
+# executable file
+frotz
+*.a
+
+# object files and ex
+*.o

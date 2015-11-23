@@ -69,8 +69,8 @@ INCL = -I/usr/local/include/
 #LIB = -L/usr/freeware/lib
 #LIB = -L/5usr/lib
 #LIB = -L/path/to/libncurses.so
-LIB = -L/usr/local/Cellar/lua/5.1.5/lib/
-
+#LIB = -L/usr/local/Cellar/lua/5.1.5/lib/
+LIB = -L/usr/local/lib
 
 # One of these must always be uncommented.  If your vendor-supplied
 # curses library won't work, comment out the first option and uncomment
