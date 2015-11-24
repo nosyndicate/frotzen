@@ -166,11 +166,12 @@ int cdecl main (int argc, char *argv[])
     if (lua_pcall(L, 0, 0, 0))                  /* Run the loaded Lua script */
         bail(L, "lua_pcall() failed");          /* Error out if Lua file has an error */
 
-    lua_getglobal(L, "tellme");
+    lua_getglobal(L, "get_islua_play");
     // now actually call the function
-    if (lua_pcall(L, 0, 0, 0))                  /* Run the function */
+    if (lua_pcall(L, 0, 1, 0))                  /* Run the function */
         bail(L, "lua_pcall() failed");          /* Error out if Lua file has an error */
-
+    islua_play = lua_tonumber(L, -1);
+    
     
     os_init_setup ();
 

@@ -1,6 +1,7 @@
 count = 0
 curScore = 0
 curMove = 0
+islua_play = 0 -- 0 if don't use the lua and just get from screen 1 if using the lua
 
 stateString = ""
 
@@ -58,4 +59,9 @@ function writeIt(val)
     file:write("buf = " .. val .. "\n")
     file:flush();
     file:close();
+end
+
+
+function get_islua_play()
+    return islua_play;
 end
